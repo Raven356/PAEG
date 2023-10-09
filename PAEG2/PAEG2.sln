@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PAEG2", "PAEG2\PAEG2.csproj", "{229DC861-ED69-4015-BACA-C2AB03107E47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{229DC861-ED69-4015-BACA-C2AB03107E47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{229DC861-ED69-4015-BACA-C2AB03107E47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{229DC861-ED69-4015-BACA-C2AB03107E47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{229DC861-ED69-4015-BACA-C2AB03107E47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D03362DB-FEF4-4D2B-86F8-F6116A156D31}
+	EndGlobalSection
+EndGlobal
