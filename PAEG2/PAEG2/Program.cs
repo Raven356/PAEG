@@ -9,23 +9,30 @@ namespace PAEG2
         static void Main(string[] args)
         {
             List<Electorate> electorates = new List<Electorate>();
+            //генеруємо електорат
             GenerateElectorate(electorates, 4);
+            //генеруємо ключі
             foreach (var electorate in electorates)
             {
                 Random random = new Random();
                 electorate.RsaKeys = KeyGeneration.BeginRSA();
                 electorate.R = random.Next(1, (int)electorate.RsaKeys.N);
             }
+            //генеруємо ключі виборчої комісії
             ElectiveCommite commite = new ElectiveCommite {RsaKeys = KeyGeneration.BeginRSA() };
+            //шифруємо бюлетені
             EncodeBulletins(electorates, commite.RsaKeys.E, commite.RsaKeys.N);
 
             int i = 0;
             foreach (var electorate in electorates)
             {
+                //комісія обирає один з 10 бюлетенів
                 Bulletin choosed = ChooseBulletin(electorate.EncodedBulletins, electorate.R, commite);
+                //шифрує його
                 BigInteger rOb = ExtendedEuclidian.FindMultiplicativeInverse(electorate.R, commite.RsaKeys.N);
                 choosed.M1 = choosed.M1 * rOb;
                 choosed.M2 = choosed.M2 * rOb;
+                //виборець перевіряє отриманий бюлетень з надісланим
                 Bulletin check = FormateBulletine(electorate.Id);
                 Bulletin gotten = new Bulletin();
                 gotten.M1 = BigInteger.ModPow(choosed.M1, commite.RsaKeys.E, commite.RsaKeys.N);
@@ -35,6 +42,7 @@ namespace PAEG2
                     Console.WriteLine("Detected manipulations");
                     return;
                 }
+                //виборець голосує
                 BigInteger c = Elect(gotten, commite.RsaKeys.E, commite.RsaKeys.N);
                 Vote(c, commite.RsaKeys.D, commite.RsaKeys.N, electorate, i++);
             }
