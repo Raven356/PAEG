@@ -6,6 +6,9 @@ namespace PAEG2
 {
     internal class Program
     {
+        static int first = 0;
+        static int second = 0;
+
         static void Main(string[] args)
         {
             List<Electorate> electorates = new List<Electorate>();
@@ -46,6 +49,8 @@ namespace PAEG2
                 BigInteger c = Elect(gotten, commite.RsaKeys.E, commite.RsaKeys.N);
                 Vote(c, commite.RsaKeys.D, commite.RsaKeys.N, electorate, i++);
             }
+            Console.WriteLine("For first: " + first);
+            Console.WriteLine("For second: " + second);
 
         }
 
@@ -79,10 +84,12 @@ namespace PAEG2
             if(choosed == 0)
             {
                 answer = BigInteger.ModPow(bulletin.M1, eVk, nVk);
+                first++;
             }
             else
             {
                 answer = BigInteger.ModPow(bulletin.M2, eVk, nVk);
+                second++;
             }
             return answer;
         }
