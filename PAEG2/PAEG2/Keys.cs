@@ -14,5 +14,9 @@ namespace PAEG2
         public BigInteger D { get; set; }
 
         public BigInteger N { get; set; }
+
+        public BigInteger P { get; set; }
+
+        public BigInteger Q { get; set; }
     }
 }

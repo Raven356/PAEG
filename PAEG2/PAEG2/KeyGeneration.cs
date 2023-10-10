@@ -19,7 +19,7 @@ namespace PAEG2
             BigInteger e = FindOddPrime(eilerFunction);
             BigInteger d = FindD(e, eilerFunction);
 
-            return new Keys { D = d, E = e, N = n };
+            return new Keys { D = d, E = e, N = n, P = p, Q = q };
         }
 
 

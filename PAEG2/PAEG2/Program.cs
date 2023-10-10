@@ -16,7 +16,7 @@ namespace PAEG2
             {
                 Random random = new Random();
                 electorate.RsaKeys = KeyGeneration.BeginRSA();
-                electorate.R = random.Next(1, (int)electorate.RsaKeys.N);
+                electorate.R = RelativePrime.FindRelativePrime(electorate.RsaKeys.N, electorate.RsaKeys.P, electorate.RsaKeys.Q);
             }
             //генеруємо ключі виборчої комісії
             ElectiveCommite commite = new ElectiveCommite {RsaKeys = KeyGeneration.BeginRSA() };
