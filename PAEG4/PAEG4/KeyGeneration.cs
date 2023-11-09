@@ -132,7 +132,7 @@ namespace PAEG4
 
             return new Ballot { Data = encryptedMessage, Voter = voter, Message = message };
         }
-
+        //розшифровка бюлетеней
         public static List<string> DecryptBallots(List<Ballot> ballot, MyUserRSAKeys userRsaKeys)
         {
             for (int i = 0; i < ballot.Count; i++)
@@ -156,6 +156,7 @@ namespace PAEG4
                 ballot[i] = Decrypt(ballot[i], userRsaKeys.UserAKeys);
             }
             List<BallotWithECP> ballotWithECPs = new List<BallotWithECP>();
+            //підпис бюлетеней, перемішення, відправка, підпис, перемішення, відправка...
             ElGamalECP elGamalECP = new ElGamalECP();
             foreach (var b in ballot)
             {
@@ -208,7 +209,7 @@ namespace PAEG4
             }
             return result;
         }
-
+        //розшифрування
         public static Ballot Decrypt(Ballot ballot, Keys keys)
         {
             for (int i = 0; i < ballot.Data.Count; i++)
@@ -219,6 +220,7 @@ namespace PAEG4
             {
                 try
                 {
+                    //давайте поможемо Даші-мандрівниці найти + (розшифрування частинами)
                     var symbol = (char)ballot.Data[i];
                     if (symbol == '+' && i > 0 && i < ballot.Data.Count - 1)
                     {
@@ -265,14 +267,17 @@ namespace PAEG4
             for (int i = 0; i < message.Count; i++)
             {
                 bool funTime = false;
+                //розділення на частини якщо число більше N
                 if (message[i] > keys.N)
                 {
                     string full = message[i].ToString();
                     string N = keys.N.ToString();
                     StringBuilder sb = new StringBuilder();
                     int middle = N.Length / 2;
+                    //карусель карусель весела карусель...
                     while (full[middle] == '0' || middle < 1 || middle > full.Length - 1)
                     {
+                        //100000-погані числа не працюють в алгоритмі
                         if (full.Count(s => !s.Equals('0')) < 2)
                         {
                             throw new Exception("I don't know try again");
@@ -295,13 +300,13 @@ namespace PAEG4
                     {
                         sb.Append(full[j]);
                     }
-
+                    //має працювати лише раз піймав
                     if (BigInteger.Parse(sb.ToString()) > keys.N){
                         Console.WriteLine("Alarm!!!!");
                         funTime = true;
                         i--;
                     }
-
+                    //щоб не було зайвих плюсів
                     if (BigInteger.Parse(sb.ToString()) == 43)
                     {
                         middle--;
@@ -333,7 +338,7 @@ namespace PAEG4
             }
             return result;
         }
-
+        //перемішення бюлетенів
         private static List<BallotWithECP> Reshufle(List<BallotWithECP> ballotWithECPs)
         {
             Random random = new Random();
