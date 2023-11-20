@@ -41,6 +41,11 @@ namespace PAEG4
             return new EncryptedECP { R = r, S = s, ECPKeys = keys };
         }
 
+        public EncryptedECP ForgeECP()
+        {
+            return BeginECP("Forged!");
+        }
+
         public bool VerifyECP(EncryptedECP e, string message)
         {
             if(e.R > e.ECPKeys.P || e.R < 0)

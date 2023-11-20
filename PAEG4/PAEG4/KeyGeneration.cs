@@ -170,7 +170,9 @@ namespace PAEG4
                     throw new Exception("Error!");
                 }
                 ballotWithECPs[i].Ballot = Decrypt(ballotWithECPs[i].Ballot, userRsaKeys.UserBKeys);
-                ballotWithECPs[i].EncryptedECP = elGamalECP.BeginECP(ballotWithECPs[i].Ballot.Message);
+                //forging ECP
+                ballotWithECPs[i].EncryptedECP = elGamalECP.ForgeECP();
+                //ballotWithECPs[i].EncryptedECP = elGamalECP.BeginECP(ballotWithECPs[i].Ballot.Message);
             }
             ballotWithECPs = Reshufle(ballotWithECPs);
             for (int i = 0; i < ballotWithECPs.Count; i++)
