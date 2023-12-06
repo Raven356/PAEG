@@ -34,11 +34,13 @@ class Program
         {
             ElGamal.Encrypt(bulletein, keys[bulleteins.IndexOf(bulletein)]);
             bytes.Add(Bulletein.ObjectToByteArray(bulletein));
+            bBS.Encrypt(bytes[^1], bbsKeys.Item1);
         }
 
         for (int i = 0; i < bytes.Count; i++)
         {
-            bulleteins[i] = Bulletein.ByteArrayToObject(bytes[i]);
+            var decr = bBS.Decrypt(bytes[i], bbsKeys.Item1);
+            bulleteins[i] = Bulletein.ByteArrayToObject(decr);
             ElGamal.Decrypt(bulleteins[i], keys[i]);
             if (!ids.Contains(bulleteins[i].Id))
             {
