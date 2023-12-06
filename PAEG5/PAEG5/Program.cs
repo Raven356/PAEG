@@ -1,6 +1,8 @@
 ﻿using PAEG5;
 using System.Security.Cryptography;
 using System.Text;
+using PAEG2;
+using System.Numerics;
 
 string candidat1Id = Guid.NewGuid().ToString();
 string candidat2Id = Guid.NewGuid().ToString();
@@ -12,7 +14,7 @@ string electorate3Id = Guid.NewGuid().ToString();
 string electorate4Id = Guid.NewGuid().ToString();
 
 
-var rsa = new RSACryptoServiceProvider();
+var rsa = KeyGeneration.BeginRSA();
 Random random = new Random();
 
 string el1Choice = candidates[random.Next(0, 2)];
@@ -56,28 +58,28 @@ List<Bulletein> LeftParts = new()
 {
     new Bulletein
     {
-        Encrypted = rsa.Encrypt(System.Text.Encoding.UTF8.GetBytes(split1[0]), RSAEncryptionPadding.Pkcs1),
+        Encrypted = KeyGeneration.Encrypt(rsa, split1[0]),
         Id = electorate1Id,
         ECP = dSA1.SignData(System.Text.Encoding.UTF8.GetBytes(split1[0]), HashAlgorithmName.SHA1),
         Message = split1[0]
     },
     new Bulletein
     {
-        Encrypted = rsa.Encrypt(System.Text.Encoding.UTF8.GetBytes(split2[0]), RSAEncryptionPadding.Pkcs1),
+        Encrypted = KeyGeneration.Encrypt(rsa, split2[0]),
         Id = electorate2Id,
         ECP = dSA2.SignData(System.Text.Encoding.UTF8.GetBytes(split2[0]), HashAlgorithmName.SHA1),
         Message = split2[0]
     },
     new Bulletein
     {
-        Encrypted = rsa.Encrypt(System.Text.Encoding.UTF8.GetBytes(split3[0]), RSAEncryptionPadding.Pkcs1),
+        Encrypted = KeyGeneration.Encrypt(rsa, split3[0]),
         Id = electorate3Id,
         ECP = dSA3.SignData(System.Text.Encoding.UTF8.GetBytes(split3[0]), HashAlgorithmName.SHA1),
         Message = split3[0]
     },
     new Bulletein
     {
-        Encrypted = rsa.Encrypt(System.Text.Encoding.UTF8.GetBytes(split4[0]), RSAEncryptionPadding.Pkcs1),
+        Encrypted = KeyGeneration.Encrypt(rsa, split4[0]),
         Id = electorate4Id,
         ECP = dSA4.SignData(System.Text.Encoding.UTF8.GetBytes(split4[0]), HashAlgorithmName.SHA1),
         Message = split4[0]
@@ -88,28 +90,28 @@ List<Bulletein> RightParts = new()
 {
     new Bulletein
     {
-        Encrypted = rsa.Encrypt(System.Text.Encoding.UTF8.GetBytes(split1[1]), RSAEncryptionPadding.Pkcs1),
+        Encrypted = KeyGeneration.Encrypt(rsa, split1[1]),
         Id = electorate1Id,
         ECP = dSA1.SignData(System.Text.Encoding.UTF8.GetBytes(split1[1]), HashAlgorithmName.SHA1),
         Message = split1[1]
     },
     new Bulletein
     {
-        Encrypted = rsa.Encrypt(System.Text.Encoding.UTF8.GetBytes(split2[1]), RSAEncryptionPadding.Pkcs1),
+        Encrypted = KeyGeneration.Encrypt(rsa, split2[1]),
         Id = electorate2Id,
         ECP = dSA2.SignData(System.Text.Encoding.UTF8.GetBytes(split2[1]), HashAlgorithmName.SHA1),
         Message = split2[1]
     },
     new Bulletein
     {
-        Encrypted = rsa.Encrypt(System.Text.Encoding.UTF8.GetBytes(split3[1]), RSAEncryptionPadding.Pkcs1),
+        Encrypted = KeyGeneration.Encrypt(rsa, split3[1]),
         Id = electorate3Id,
         ECP = dSA3.SignData(System.Text.Encoding.UTF8.GetBytes(split3[1]), HashAlgorithmName.SHA1),
         Message = split3[1]
     },
     new Bulletein
     {
-        Encrypted = rsa.Encrypt(System.Text.Encoding.UTF8.GetBytes(split4[1]), RSAEncryptionPadding.Pkcs1),
+        Encrypted = KeyGeneration.Encrypt(rsa, split4[1]),
         Id = electorate4Id,
         ECP = dSA4.SignData(System.Text.Encoding.UTF8.GetBytes(split4[1]), HashAlgorithmName.SHA1),
         Message = split4[1]
@@ -155,7 +157,12 @@ foreach (var x in RightParts)
 
 for (int x = 0; x < LeftParts.Count; x++)
 {
-    var left = Encoding.UTF8.GetString(rsa.Decrypt(LeftParts[x].Encrypted, RSAEncryptionPadding.Pkcs1));
-    var right = Encoding.UTF8.GetString(rsa.Decrypt(RightParts[x].Encrypted, RSAEncryptionPadding.Pkcs1));
-    Console.WriteLine($"{LeftParts[x].Id} voted for {left + right}");
+    //var left = Encoding.UTF8.GetString(rsa.Decrypt(LeftParts[x].Encrypted, RSAEncryptionPadding.Pkcs1));
+    //var right = Encoding.UTF8.GetString(rsa.Decrypt(RightParts[x].Encrypted, RSAEncryptionPadding.Pkcs1));
+    var fullArr = new List<BigInteger>();
+    fullArr.AddRange(LeftParts[x].Encrypted);
+    fullArr.AddRange(RightParts[x].Encrypted);
+    var full = KeyGeneration.Decrypt(rsa, fullArr);
+    Console.WriteLine($"{LeftParts[x].Id} voted for {full}");
+    //Console.WriteLine($"Control {full}");
 }
