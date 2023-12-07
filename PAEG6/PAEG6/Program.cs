@@ -55,6 +55,7 @@ class Program
                 continue;
             }
             Console.WriteLine($"User {bulleteins[i].Id} voted for {bulleteins[i].Message}");
+            ids.Remove(bulleteins[i].Id);
         }
     }
     
